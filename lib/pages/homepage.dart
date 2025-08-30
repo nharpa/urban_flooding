@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:urban_flooding/widgets/home_page_button.dart';
+import 'package:urban_flooding/pages/tipsandtricks.dart';
+import 'package:urban_flooding/widgets/weather_card.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -29,7 +32,7 @@ class Homepage extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
           child: Text(
             "Information Portal",
             style: Theme.of(context).textTheme.headlineSmall,
@@ -44,7 +47,14 @@ class Homepage extends StatelessWidget {
             Expanded(
               child: HomePageButton(
                 buttonText: "Tips and Tricks",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TipsAndTricksPage(),
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -69,27 +79,7 @@ class Homepage extends StatelessWidget {
   }
 
   Widget _buildWeatherWidget() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.lightBlue[50],
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.blueAccent, width: 2),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'Current Weather Conditions',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8),
-          Text('Current Temperature: 23°C', style: TextStyle(fontSize: 16)),
-          Text('Current Conditions: Cloudy', style: TextStyle(fontSize: 16)),
-          Text('Current Flood Risk: Moderate', style: TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
+    return WeatherCard();
   }
 
   @override
@@ -102,36 +92,13 @@ class Homepage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildMapPlaceholder(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             _buildButtonGrid(context),
             const SizedBox(height: 24),
             _buildWeatherWidget(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class HomePageButton extends StatelessWidget {
-  final String buttonText;
-  final VoidCallback onPressed;
-
-  const HomePageButton({
-    super.key,
-    required this.buttonText,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      onPressed: onPressed,
-      child: Text(buttonText),
     );
   }
 }
