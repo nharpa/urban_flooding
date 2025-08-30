@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'theme/theme.dart';
 import 'package:urban_flooding/pages/homepage.dart';
 
 void main() {
@@ -10,9 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      title: 'Urban Flooding App',
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system, // auto switch based on device
+      home: const Homepage(),
     );
   }
 }
