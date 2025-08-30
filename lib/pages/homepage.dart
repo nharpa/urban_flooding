@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:urban_flooding/widgets/home_page_button.dart';
 import 'package:urban_flooding/pages/tipsandtricks.dart';
 import 'package:urban_flooding/widgets/weather_card.dart';
+import 'package:urban_flooding/pages/weatherforcast.dart';
+
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -65,7 +67,14 @@ class Homepage extends StatelessWidget {
             Expanded(
               child: HomePageButton(
                 buttonText: "Weather Forecast",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WeatherForecastPage(),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(width: 16),
