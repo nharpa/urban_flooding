@@ -12,6 +12,9 @@ class HomePageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: onPressed, child: Text(buttonText));
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Center(child: Text(buttonText, textAlign: TextAlign.center)),
+    );
   }
 }
