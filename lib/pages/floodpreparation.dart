@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TipsAndTricksPage extends StatelessWidget {
-  const TipsAndTricksPage({super.key});
+class FloodPreparation extends StatelessWidget {
+  const FloodPreparation({super.key});
 
   Widget _buildTitle() {
     return Column(
@@ -60,13 +60,6 @@ class TipsAndTricksPage extends StatelessWidget {
             _buildCollapsibleCard('Emergency Kit Preperation'),
             _buildCollapsibleCard('Pets and Livestock'),
             _buildCollapsibleCard('Emergency Help and Contact'),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
-              },
-              child: const Text('Return to Home'),
-            ),
           ],
         ),
       ),
