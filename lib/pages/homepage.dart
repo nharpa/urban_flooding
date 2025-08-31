@@ -3,6 +3,8 @@ import 'package:urban_flooding/widgets/home_page_button.dart';
 import 'package:urban_flooding/pages/floodpreparation.dart';
 import 'package:urban_flooding/widgets/weather_card.dart';
 import 'package:urban_flooding/pages/weatherforcast.dart';
+import 'package:urban_flooding/pages/warnings.dart';
+import 'package:urban_flooding/pages/login.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -42,7 +44,10 @@ class Homepage extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: HomePageButton(buttonText: "Hazard Map", onPressed: () {}),
+              child: HomePageButton(
+                buttonText: "Hazard Map (soonTM)",
+                onPressed: () {},
+              ),
             ),
             const SizedBox(width: 16), // spacing between buttons
             Expanded(
@@ -53,7 +58,6 @@ class Homepage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const FloodPreparation(),
-
                     ),
                   );
                 },
@@ -79,7 +83,17 @@ class Homepage extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: HomePageButton(buttonText: "Warnings", onPressed: () {}),
+              child: HomePageButton(
+                buttonText: "Warnings",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WarningsPage(),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -101,10 +115,28 @@ class Homepage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildMapPlaceholder(),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             _buildButtonGrid(context),
-            const SizedBox(height: 24),
+            const SizedBox(height: 10),
             _buildWeatherWidget(),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                child: const Text(
+                  'Log in/Sign up',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

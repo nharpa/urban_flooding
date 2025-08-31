@@ -1,3 +1,8 @@
+// Dark Gray / Black: #292929
+// Beige / Sand: #e1c29a
+// Orange: #fd7004
+// Blue: #1767c0
+
 import 'package:flutter/material.dart';
 
 class AppTheme {

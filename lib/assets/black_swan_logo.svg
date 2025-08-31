@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .swan { fill: #000000; }
+      .beak { fill: #ff0000; }
+      .eye { fill: #ffffff; }
+      .ripple { fill: none; stroke: #e1c29a; stroke-width: 14; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <!-- Ripples -->
+  <ellipse class="ripple" cx="256" cy="390" rx="170" ry="32"/>
+  <ellipse class="ripple" cx="256" cy="370" rx="135" ry="26"/>
+  <ellipse class="ripple" cx="256" cy="352" rx="100" ry="20"/>
+
+  <!-- Swan body + neck (single silhouette) -->
+  <path class="swan" d="M110,360
+    C110,300 170,270 205,265
+    C220,240 220,220 235,205
+    C255,185 280,180 305,195
+    C315,200 320,210 320,220
+    C320,232 312,242 300,244
+    C288,246 280,239 275,232
+    C270,225 265,224 260,230
+    C252,240 255,255 270,270
+    C295,295 335,300 370,310
+    C395,317 420,335 420,360
+    C420,400 360,420 270,420
+    C180,420 110,400 110,360 Z"/>
+
+  <!-- Wing hint (same fill, adds a subtle contour) -->
+  <path class="swan" d="M225,340
+    C265,300 315,300 360,330
+    C320,320 285,340 260,365
+    C245,350 235,345 225,340 Z" opacity="0.95"/>
+
+  <!-- Head (small circle) -->
+  <circle class="swan" cx="305" cy="200" r="26"/>
+
+  <!-- Beak -->
+  <path class="beak" d="M327,196 L355,206 L327,216 Z"/>
+
+  <!-- Eye -->
+  <circle class="eye" cx="298" cy="194" r="4"/>
+</svg>
