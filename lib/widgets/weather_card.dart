@@ -46,7 +46,7 @@ class _WeatherCardState extends State<WeatherCard> {
     if (forecastIconCode == null || forecastIconCode.isEmpty) {
       return 'assets/icons/1.png';
     }
-    return 'assets/icons/16.png';
+    return 'assets/icons/$forecastIconCode.png';
   }
 
   @override
@@ -76,7 +76,7 @@ class _WeatherCardState extends State<WeatherCard> {
                 width: 42,
                 height: 42,
                 child: Image.asset(
-                  'assets/icons/16.png',
+                  _getWeatherIconAsset(weatherData.forecastIconCode),
                   width: 42,
                   height: 42,
                   fit: BoxFit.contain,
