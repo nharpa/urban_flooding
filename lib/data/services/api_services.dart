@@ -15,41 +15,15 @@ Future<Position?> getCurrentDeviceLocation() async {
   }
 }
 
-/// Gets the device's current location and queries the weather observations API.
-Future<Map<String, dynamic>?>
-fetchWeatherObservationsForCurrentLocation() async {
-  try {
-    Position? position = await getCurrentDeviceLocation();
-    if (position == null) return null;
-    double lat = position.latitude;
-    double lon = position.longitude;
-
-    final url = Uri.parse('http://10.0.2.2:8000/api/v1/weather');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({"lat": lat, "lon": lon}),
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body) as Map<String, dynamic>;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    return null;
-  }
-}
-
 /// Gets the device's current location and queries the forecast API.
-Future<Map<String, dynamic>?> fetchForecastForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
   try {
     Position? position = await getCurrentDeviceLocation();
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
 
-    final url = Uri.parse('http://10.0.2.2:8000/api/v1/forecast');
+    final url = Uri.parse('http://10.0.2.2:8000/api/v1/weathercondition');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},

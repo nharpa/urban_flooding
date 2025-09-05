@@ -1,27 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:urban_flooding/data/services/api_services.dart';
 
 class WeatherData {
-  final String temperature;
+  final double temperature;
   final String condition;
   final String floodRisk;
+  final String forecastIconCode;
 
   WeatherData({
     required this.temperature,
     required this.condition,
     required this.floodRisk,
+    required this.forecastIconCode,
   });
 }
 
 Future<WeatherData?> getWeatherForecast() async {
-  final forecast = await fetchForecastForCurrentLocation();
+  final forecast = await fetchWeatherConditionForCurrentLocation();
   if (forecast == null) return null;
-  String precis = forecast['data'][0]['forecast']['precis'];
 
-  print(forecast['data'][0]['forecast']);
+  String precis = forecast['data']['precis'];
+  double temperature = forecast['data']['temperature'];
+  String forecastIconCode = forecast['data']['forecast_icon_code'];
+  // String floodRisk = forecast['data']['floodRisk'];
 
-  return WeatherData(temperature: '17°C', condition: precis, floodRisk: 'high');
+  WeatherData response = WeatherData(
+    temperature: temperature,
+    condition: precis,
+    floodRisk: 'tbc',
+    forecastIconCode: forecastIconCode,
+  );
+
+  return response;
 }
 
 class WeatherCard extends StatefulWidget {
@@ -32,22 +42,18 @@ class WeatherCard extends StatefulWidget {
 }
 
 class _WeatherCardState extends State<WeatherCard> {
-  String _getWeatherIconAsset(String condition) {
-    switch (condition.toLowerCase()) {
-      case 'sunny':
-        return 'lib/assets/weather_sunny.svg';
-      case 'rainy':
-        return 'lib/assets/weather_rainy.svg';
-      case 'cloudy':
-      default:
-        return 'lib/assets/weather_cloudy.svg';
+  String _getWeatherIconAsset(String? forecastIconCode) {
+    if (forecastIconCode == null || forecastIconCode.isEmpty) {
+      return 'assets/icons/1.png';
     }
+    return 'assets/icons/16.png';
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<WeatherData?>(
       future: getWeatherForecast(),
+
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -66,10 +72,15 @@ class _WeatherCardState extends State<WeatherCard> {
           ),
           child: Row(
             children: [
-              SvgPicture.asset(
-                _getWeatherIconAsset(weatherData.condition),
-                width: 48,
-                height: 48,
+              SizedBox(
+                width: 42,
+                height: 42,
+                child: Image.asset(
+                  'assets/icons/16.png',
+                  width: 42,
+                  height: 42,
+                  fit: BoxFit.contain,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(

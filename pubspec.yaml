@@ -24,7 +24,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/black_swan_logo.svg
-    - lib/assets/weather_cloudy.svg
-    - lib/assets/weather_sunny.svg
-    - lib/assets/weather_rainy.svg
+    - assets/black_swan_logo.svg
+    - assets/icons/
