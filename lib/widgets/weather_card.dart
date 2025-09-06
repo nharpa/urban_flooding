@@ -45,10 +45,10 @@ class WeatherCard extends StatefulWidget {
 class _WeatherCardState extends State<WeatherCard> {
   String _getWeatherIconAsset(String? forecastIconCode) {
     if (forecastIconCode == null || forecastIconCode.isEmpty) {
-      return 'lib/assets/icons/1.svg';
+      return 'lib/assets/1.svg';
     }
     // todo: make sure all possible forecastIconCodes are handled
-    return 'lib/assets/icons/$forecastIconCode.svg';
+    return 'lib/assets/$forecastIconCode.svg';
   }
 
   @override
