@@ -9,10 +9,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  geolocator: ^14.0.2
   english_words: ^4.0.0
   provider: ^6.1.5
-  flutter_svg: ^2.0.7
+  flutter_svg: ^2.2.0
   fl_chart: ^1.1.0
+  http: ^1.5.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -22,7 +25,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/black_swan_logo.svg
-    - lib/assets/weather_cloudy.svg
-    - lib/assets/weather_sunny.svg
-    - lib/assets/weather_rainy.svg
+  - lib/assets/

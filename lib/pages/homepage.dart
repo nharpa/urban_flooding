@@ -70,7 +70,7 @@ class Homepage extends StatelessWidget {
           children: [
             Expanded(
               child: HomePageButton(
-                buttonText: "Weather Forecast",
+                buttonText: "Weather",
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -117,7 +117,7 @@ class Homepage extends StatelessWidget {
             _buildMapPlaceholder(),
             const SizedBox(height: 10),
             _buildButtonGrid(context),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             _buildWeatherWidget(),
             Align(
               alignment: Alignment.centerRight,
