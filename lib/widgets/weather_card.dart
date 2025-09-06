@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:urban_flooding/data/services/api_services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WeatherData {
   final double temperature;
@@ -44,9 +45,10 @@ class WeatherCard extends StatefulWidget {
 class _WeatherCardState extends State<WeatherCard> {
   String _getWeatherIconAsset(String? forecastIconCode) {
     if (forecastIconCode == null || forecastIconCode.isEmpty) {
-      return 'assets/icons/1.png';
+      return 'lib/assets/1.svg';
     }
-    return 'assets/icons/$forecastIconCode.png';
+    // todo: make sure all possible forecastIconCodes are handled
+    return 'lib/assets/$forecastIconCode.svg';
   }
 
   @override
@@ -72,34 +74,25 @@ class _WeatherCardState extends State<WeatherCard> {
           ),
           child: Row(
             children: [
-              SizedBox(
-                width: 42,
-                height: 42,
-                child: Image.asset(
-                  _getWeatherIconAsset(weatherData.forecastIconCode),
-                  width: 42,
-                  height: 42,
-                  fit: BoxFit.contain,
-                ),
+              SvgPicture.asset(
+                _getWeatherIconAsset(weatherData.forecastIconCode),
+                width: 52,
+                height: 52,
+                fit: BoxFit.contain,
               ),
               const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Current Weather Conditions',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text('Temperature: ${weatherData.temperature}'),
-                    Text('Conditions: ${weatherData.condition}'),
-                    Text('Flood Risk: ${weatherData.floodRisk}'),
-                  ],
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Current Weather Conditions',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Temperature: ${weatherData.temperature}'),
+                  Text('Conditions: ${weatherData.condition}'),
+                  Text('Flood Risk: ${weatherData.floodRisk}'),
+                ],
               ),
             ],
           ),

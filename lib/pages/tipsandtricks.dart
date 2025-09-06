@@ -49,7 +49,7 @@ class TipsAndTricksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tips and Tricks')),
+      appBar: AppBar(title: const Text('Flood Preperation')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

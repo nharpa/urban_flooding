@@ -24,5 +24,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/precisforecasticon/
-    - lib/assets/black_swan_logo.svg
+  - lib/assets/
