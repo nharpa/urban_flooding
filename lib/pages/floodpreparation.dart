@@ -9,7 +9,7 @@ class FloodPreparation extends StatelessWidget {
         const Divider(thickness: 2),
         const SizedBox(height: 8),
         const Text(
-          'Flood Preperation & Survival Guide',
+          'Flood Preparation & Survival Guide',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
@@ -49,7 +49,7 @@ class FloodPreparation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tips and Tricks')),
+      appBar: AppBar(title: const Text('Flood Preperation')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -60,6 +60,13 @@ class FloodPreparation extends StatelessWidget {
             _buildCollapsibleCard('Emergency Kit Preperation'),
             _buildCollapsibleCard('Pets and Livestock'),
             _buildCollapsibleCard('Emergency Help and Contact'),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              child: const Text('Return to Home'),
+            ),
           ],
         ),
       ),

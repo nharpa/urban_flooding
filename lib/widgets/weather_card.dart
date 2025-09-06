@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urban_flooding/data/services/api_services.dart';
+import 'package:urban_flooding/data/api_services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class WeatherData {

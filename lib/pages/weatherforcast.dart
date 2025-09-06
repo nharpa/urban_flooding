@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urban_flooding/widgets/weather_card.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:urban_flooding/data/services/api_services.dart';
+import 'package:urban_flooding/data/api_services.dart';
 
 class WeatherForecastPage extends StatelessWidget {
   const WeatherForecastPage({super.key});
