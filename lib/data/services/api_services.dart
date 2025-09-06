@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // const String apiDomain = 'http://10.0.2.2:8000'; // Local Ip for Development
-const String apiDomain = 'http://209.38.30.123:8000'; // Production IP
+final String apiDomain = dotenv.env['API_DOMAIN'] ?? 'http://10.0.2.2:8000';
 
 /// Gets the device's current location as a Position object.
 Future<Position?> getCurrentDeviceLocation() async {
@@ -14,6 +15,47 @@ Future<Position?> getCurrentDeviceLocation() async {
     );
   } catch (e) {
     // Handle error
+    return null;
+  }
+}
+
+/// Fetches probability_of_precipitation and start_time for the first 7 forecast periods.
+Future<List<Map<String, dynamic>>?> fetchChanceOfRainForecast() async {
+  try {
+    Position? position = await getCurrentDeviceLocation();
+    if (position == null) return null;
+    double lat = position.latitude;
+    double lon = position.longitude;
+
+    final url = Uri.parse('$apiDomain/api/v1/forecast');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({"lat": lat, "lon": lon}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<dynamic>? forecastData = data['data'] as List<dynamic>?;
+      if (forecastData == null) return null;
+      List<Map<String, dynamic>> result = [];
+      for (int i = 0; i < forecastData.length && i < 7; i++) {
+        final item = forecastData[i];
+        String popStr =
+            item['forecast']['probability_of_precipitation']?.toString() ??
+            '0%';
+        double pop = double.tryParse(popStr.replaceAll('%', '')) ?? 0.0;
+        result.add({
+          'probability_of_precipitation': pop,
+          'start_time': item['start_time'],
+        });
+      }
+
+      return result;
+    } else {
+      return null;
+    }
+  } catch (e) {
     return null;
   }
 }
