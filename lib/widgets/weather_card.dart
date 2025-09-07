@@ -42,13 +42,22 @@ class WeatherCard extends StatefulWidget {
   State<WeatherCard> createState() => _WeatherCardState();
 }
 
+bool isDayTime() {
+  final now = DateTime.now();
+  return now.hour >= 6 && now.hour < 18; // 6am–6pm = day
+}
+
 class _WeatherCardState extends State<WeatherCard> {
   String _getWeatherIconAsset(String? forecastIconCode) {
     if (forecastIconCode == null || forecastIconCode.isEmpty) {
-      return 'lib/assets/1.svg';
+      return 'lib/assets/day/1.svg';
     }
     // todo: make sure all possible forecastIconCodes are handled
-    return 'lib/assets/$forecastIconCode.svg';
+    if (isDayTime()) {
+      return 'lib/assets/day/$forecastIconCode.svg';
+    } else {
+      return 'lib/assets/night/$forecastIconCode.svg';
+    }
   }
 
   @override
