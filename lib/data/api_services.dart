@@ -26,7 +26,6 @@ Future<List<Map<String, dynamic>>?> fetchChanceOfRainForecast() async {
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
-
     final url = Uri.parse('$apiDomain/api/v1/forecast');
     final response = await http.post(
       url,
@@ -68,7 +67,6 @@ fetchRainfallObservationsForCurrentLocation() async {
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
-
     final url = Uri.parse('$apiDomain/api/v1/weather');
     final response = await http.post(
       url,

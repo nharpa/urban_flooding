@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:urban_flooding/widgets/weather_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:urban_flooding/data/api_services.dart';
+import 'package:intl/intl.dart';
 
 class WeatherForecastPage extends StatelessWidget {
   const WeatherForecastPage({super.key});
@@ -123,28 +124,97 @@ class ChanceOfRain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        lineBarsData: [
-          LineChartBarData(
-            spots: [
-              FlSpot(0, 10),
-              FlSpot(1, 30),
-              FlSpot(2, 50),
-              FlSpot(3, 40),
-              FlSpot(4, 80),
-              FlSpot(5, 60),
-              FlSpot(6, 20),
-            ],
-            isCurved: true,
-            barWidth: 4,
-            dotData: FlDotData(show: false),
+    return FutureBuilder<List<Map<String, dynamic>>?>(
+      future: fetchChanceOfRainForecast(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData ||
+            snapshot.data == null ||
+            snapshot.data!.isEmpty) {
+          return const Center(child: Text('No data available'));
+        }
+
+        // Sort by start_time and take the last 7
+        final data = List<Map<String, dynamic>>.from(snapshot.data!);
+        data.sort((a, b) => a['start_time'].compareTo(b['start_time']));
+        final last7 = data.length > 7 ? data.sublist(data.length - 7) : data;
+
+        // Prepare chart data
+        final spots = <FlSpot>[];
+        final labels = <String>[];
+        for (int i = 0; i < last7.length; i++) {
+          final value = last7[i]['probability_of_precipitation'] ?? 0.0;
+          final dateStr = last7[i]['start_time'] ?? '';
+          String label = '';
+          try {
+            final date = DateTime.parse(dateStr);
+            label = DateFormat('dd-MM').format(date);
+          } catch (_) {
+            label = dateStr;
+          }
+          spots.add(FlSpot(i.toDouble(), value.toDouble()));
+          labels.add(label);
+        }
+
+        return AspectRatio(
+          aspectRatio: 1.7,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: LineChart(
+              LineChartData(
+                minY: 0,
+                maxY: 100,
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: true, reservedSize: 32),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 1,
+                      getTitlesWidget: (value, meta) {
+                        int idx = value.toInt();
+                        if (idx < 0 || idx >= labels.length) {
+                          return const SizedBox.shrink();
+                        }
+                        return Transform.rotate(
+                          angle: -0.785398, // -45 degrees in radians
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: Text(
+                              labels[idx],
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                gridData: FlGridData(show: true),
+                borderData: FlBorderData(show: true),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: spots,
+                    isCurved: true,
+                    barWidth: 3,
+                    color: Colors.blue,
+                    dotData: FlDotData(show: true),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-        titlesData: FlTitlesData(show: true),
-        gridData: FlGridData(show: true),
-        borderData: FlBorderData(show: false),
-      ),
+        );
+      },
     );
   }
 }
