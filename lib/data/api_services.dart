@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // const String apiDomain = 'http://10.0.2.2:8000'; // Local Ip for Development
 final String apiDomain = dotenv.env['API_DOMAIN'] ?? 'http://10.0.2.2:8000';
+final String apiKey = dotenv.env['API_KEY'] ?? '';
 
 /// Gets the device's current location as a Position object.
 Future<Position?> getCurrentDeviceLocation() async {
@@ -29,7 +30,10 @@ Future<List<Map<String, dynamic>>?> fetchChanceOfRainForecast() async {
     final url = Uri.parse('$apiDomain/api/v1/forecast');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+      },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
 
@@ -70,7 +74,10 @@ fetchRainfallObservationsForCurrentLocation() async {
     final url = Uri.parse('$apiDomain/api/v1/weather');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+      },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
 
@@ -127,10 +134,13 @@ Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
     final url = Uri.parse('$apiDomain/api/v1/weathercondition');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+      },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
-
+    print(response.body);
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
