@@ -1,38 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:urban_flooding/data/api_services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:urban_flooding/widgets/weather_icon.dart';
 
 class WeatherData {
   final double temperature;
+  final double feelsLike;
   final String condition;
   final String floodRisk;
-  final String forecastIconCode;
+  final String conditionIconCode;
 
   WeatherData({
     required this.temperature,
+    required this.feelsLike,
     required this.condition,
     required this.floodRisk,
-    required this.forecastIconCode,
+    required this.conditionIconCode,
   });
 }
 
-Future<WeatherData?> getWeatherForecast() async {
-  final forecast = await fetchWeatherConditionForCurrentLocation();
-  if (forecast == null) return null;
+Future<WeatherData?> getWeatherConditions() async {
+  final response = await fetchWeatherConditionForCurrentLocation();
+  if (response == null) return null;
 
-  String precis = forecast['data']['precis'];
-  double temperature = forecast['data']['temperature'];
-  String forecastIconCode = forecast['data']['forecast_icon_code'];
-  // String floodRisk = forecast['data']['floodRisk'];
+  final conditions = response['data']['conditions'];
+  String condition = conditions['condition'];
+  String forecastIconUri = conditions['forecast_icon_uri'];
+  double temperature = (conditions['temperature'] is int)
+      ? (conditions['temperature'] as int).toDouble()
+      : (conditions['temperature'] is double)
+      ? conditions['temperature']
+      : double.tryParse(conditions['temperature'].toString()) ?? 0.0;
 
-  WeatherData response = WeatherData(
+  double feelsLike = (conditions['feels_like'] is int)
+      ? (conditions['feels_like'] as int).toDouble()
+      : (conditions['feels_like'] is double)
+      ? conditions['feels_like']
+      : double.tryParse(conditions['feels_like'].toString()) ?? 0.0;
+
+  // String floodRisk = conditions['data']['floodRisk'];
+
+  WeatherData weatherData = WeatherData(
     temperature: temperature,
-    condition: precis,
+    feelsLike: feelsLike,
+    condition: condition,
     floodRisk: 'tbc',
-    forecastIconCode: forecastIconCode,
+    conditionIconCode: forecastIconUri,
   );
 
-  return response;
+  return weatherData;
 }
 
 class WeatherCard extends StatefulWidget {
@@ -48,23 +63,10 @@ bool isDayTime() {
 }
 
 class _WeatherCardState extends State<WeatherCard> {
-  String _getWeatherIconAsset(String? forecastIconCode) {
-    if (forecastIconCode == null || forecastIconCode.isEmpty) {
-      return 'lib/assets/day/1.svg';
-    }
-    // todo: make sure all possible forecastIconCodes are handled
-    if (isDayTime()) {
-      return 'lib/assets/day/$forecastIconCode.svg';
-    } else {
-      return 'lib/assets/night/$forecastIconCode.svg';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<WeatherData?>(
-      future: getWeatherForecast(),
-
+      future: getWeatherConditions(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -83,12 +85,7 @@ class _WeatherCardState extends State<WeatherCard> {
           ),
           child: Row(
             children: [
-              SvgPicture.asset(
-                _getWeatherIconAsset(weatherData.forecastIconCode),
-                width: 52,
-                height: 52,
-                fit: BoxFit.contain,
-              ),
+              WeatherIcon(iconBaseUrl: weatherData.conditionIconCode, size: 52),
               const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +95,9 @@ class _WeatherCardState extends State<WeatherCard> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text('Temperature: ${weatherData.temperature}'),
+                  Text(
+                    'Temperature: ${weatherData.temperature} (Feels Like: ${weatherData.feelsLike})',
+                  ),
                   Text('Conditions: ${weatherData.condition}'),
                   Text('Flood Risk: ${weatherData.floodRisk}'),
                 ],
