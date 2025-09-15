@@ -75,4 +75,14 @@ class AppTheme {
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
     ),
   );
+
+  // Custom colors for forecast table
+  static const forecastTableHeaderLight = Color(0xFFE1C29A); // Beige/Sand
+  static const forecastTableHeaderDark = Color(0xFF292929); // Dark Gray
+  static const forecastTableBorderLight = Color(0xFF1767C0); // Blue
+  static const forecastTableBorderDark = Color(0xFFfd7004); // Orange
+  static const forecastTableRowLight = Color(0xFFF8F6F2); // Light background
+  static const forecastTableRowDark = Color(0xFF232323); // Dark background
+  static const forecastTableTextLight = Colors.black;
+  static const forecastTableTextDark = Colors.white;
 }

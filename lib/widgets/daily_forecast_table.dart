@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urban_flooding/theme/theme.dart';
 import 'package:urban_flooding/widgets/weather_icon.dart';
 
 // Helper to extract and format daily forecast data for the table
@@ -12,15 +13,14 @@ List<Map<String, dynamic>> extractDailyForecast(
   final formattedData = data
       .map<Map<String, dynamic>>(
         (item) => {
-          'date': item['interval']['displayDate'],
+          'date': item['displayDate'],
           'minTemp': item['maxTemperature']['degrees'],
           'maxTemp': item['minTemperature']['degrees'],
           'daytimeForecast': {
             'weatherCondition':
                 item['daytimeForecast']['weatherCondition']['description']['text'],
             'icon': item['daytimeForecast']['weatherCondition']['iconBaseUri'],
-            'humidity':
-                item['daytimeForecast']['weatherCondition']['relativeHumidity'],
+            'humidity': item['daytimeForecast']['relativeHumidity'],
             'rainChance':
                 item['daytimeForecast']['precipitation']['probability']['percent'],
             'rainAmount':
@@ -31,8 +31,7 @@ List<Map<String, dynamic>> extractDailyForecast(
                 item['nighttimeForecast']['weatherCondition']['description']['text'],
             'icon':
                 item['nighttimeForecast']['weatherCondition']['iconBaseUri'],
-            'humidity':
-                item['nighttimeForecast']['weatherCondition']['relativeHumidity'],
+            'humidity': item['nighttimeForecast']['relativeHumidity'],
             'rainChance':
                 item['nighttimeForecast']['precipitation']['probability']['percent'],
             'rainAmount':
@@ -41,8 +40,72 @@ List<Map<String, dynamic>> extractDailyForecast(
         },
       )
       .toList();
-  print(formattedData);
+
   return formattedData;
+}
+
+String formatDisplayDate(Map<String, dynamic>? dateMap) {
+  print('Received dateMap: $dateMap');
+  if (dateMap == null) return '';
+  final year = dateMap['year'] as int?;
+  final month = dateMap['month'] as int?;
+  final day = dateMap['day'] as int?;
+  if (year == null || month == null || day == null) return '';
+  final date = DateTime(year, month, day);
+  const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  final weekday = weekdays[date.weekday - 1];
+  print('Formatted date: $weekday $day/$month');
+  return '$weekday $day/$month';
+}
+
+String formatDialogDate(Map<String, dynamic>? dateMap) {
+  if (dateMap == null) return '';
+  final year = dateMap['year'] as int?;
+  final month = dateMap['month'] as int?;
+  final day = dateMap['day'] as int?;
+  if (year == null || month == null || day == null) return '';
+  final date = DateTime(year, month, day);
+  const weekdays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+  const months = [
+    '',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  String suffix(int d) {
+    if (d >= 11 && d <= 13) return 'th';
+    switch (d % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  final weekday = weekdays[date.weekday - 1];
+  final monthName = months[month];
+  return '$weekday $day${suffix(day)} $monthName $year';
 }
 
 class DailyForecastTable extends StatelessWidget {
@@ -52,8 +115,26 @@ class DailyForecastTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final forecast = extractDailyForecast(dailyData);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final headerColor = isDark
+        ? AppTheme.forecastTableHeaderDark
+        : AppTheme.forecastTableHeaderLight;
+    final borderColor = isDark
+        ? AppTheme.forecastTableBorderDark
+        : AppTheme.forecastTableBorderLight;
+    final rowColor = isDark
+        ? AppTheme.forecastTableRowDark
+        : AppTheme.forecastTableRowLight;
+    final textColor = isDark
+        ? AppTheme.forecastTableTextDark
+        : AppTheme.forecastTableTextLight;
     if (forecast.isEmpty) {
-      return const Center(child: Text('No daily forecast data available'));
+      return Center(
+        child: Text(
+          'No daily forecast data available',
+          style: TextStyle(color: textColor),
+        ),
+      );
     }
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 16),
@@ -62,84 +143,126 @@ class DailyForecastTable extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               '7-Day Forecast',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
             ),
             const SizedBox(height: 8),
             Table(
               columnWidths: const {
                 0: FixedColumnWidth(80), // Date
-                1: FixedColumnWidth(40), // Min
-                2: FixedColumnWidth(40), // Max
-                3: FixedColumnWidth(40), // Day icon
-                4: FixedColumnWidth(40), // Night icon
+                1: FixedColumnWidth(50), // Min
+                2: FixedColumnWidth(50), // Max
+                3: FixedColumnWidth(50), // Day icon
+                4: FixedColumnWidth(50), // Night icon
                 5: FlexColumnWidth(), // Expand
               },
-              border: TableBorder.all(color: Colors.grey),
+              border: TableBorder.all(color: borderColor),
               children: [
                 TableRow(
-                  decoration: BoxDecoration(color: Colors.grey[200]),
-                  children: const [
+                  decoration: BoxDecoration(color: headerColor),
+                  children: [
                     Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Min',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Max',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Day',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Text(
                         'Night',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.all(4.0), child: Text('')),
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Text(''),
+                    ),
                   ],
                 ),
                 ...forecast.map(
                   (day) => TableRow(
+                    decoration: BoxDecoration(color: rowColor),
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(day['date'] ?? ''),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                          vertical: 8.0,
+                        ),
+                        child: Text(
+                          formatDisplayDate(
+                            day['date'] as Map<String, dynamic>?,
+                          ),
+                          style: TextStyle(color: textColor),
+                        ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                          vertical: 8.0,
+                        ),
                         child: Text(
                           day['minTemp'] != null ? '${day['minTemp']}°' : '',
+                          style: TextStyle(color: textColor),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                          vertical: 8.0,
+                        ),
                         child: Text(
                           day['maxTemp'] != null ? '${day['maxTemp']}°' : '',
+                          style: TextStyle(color: textColor),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                          vertical: 8.0,
+                        ),
                         child: day['daytimeForecast']?['icon'] != null
                             ? WeatherIcon(
                                 iconBaseUrl: day['daytimeForecast']['icon'],
@@ -148,7 +271,10 @@ class DailyForecastTable extends StatelessWidget {
                             : const SizedBox.shrink(),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                          vertical: 8.0,
+                        ),
                         child: day['nighttimeForecast']?['icon'] != null
                             ? WeatherIcon(
                                 iconBaseUrl: day['nighttimeForecast']['icon'],
@@ -158,7 +284,16 @@ class DailyForecastTable extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: _ForecastExpandIcon(day: day),
+                        child: IconButton(
+                          icon: Icon(Icons.info_outline, color: textColor),
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => _ForecastDetailsDialog(
+                              day: day,
+                              textColor: textColor,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -172,53 +307,147 @@ class DailyForecastTable extends StatelessWidget {
   }
 }
 
-class _ForecastExpandIcon extends StatefulWidget {
+class _ForecastDetailsDialog extends StatelessWidget {
   final Map<String, dynamic> day;
-  const _ForecastExpandIcon({required this.day});
-
-  @override
-  State<_ForecastExpandIcon> createState() => _ForecastExpandIconState();
-}
-
-class _ForecastExpandIconState extends State<_ForecastExpandIcon> {
-  bool _expanded = false;
+  final Color textColor;
+  const _ForecastDetailsDialog({required this.day, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
-          onPressed: () => setState(() => _expanded = !_expanded),
-        ),
-        if (_expanded)
-          Padding(
-            padding: const EdgeInsets.all(4.0),
+    return AlertDialog(
+      backgroundColor: Theme.of(context).cardColor,
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 24,
+      ), // reduce space around dialog
+      content: SizedBox(
+        width: 800, // make dialog card even wider
+        child: Card(
+          color: Theme.of(context).cardColor,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Day: ${widget.day['daytimeForecast']?['weatherCondition'] ?? ''}',
+                  formatDialogDate(day['date'] as Map<String, dynamic>?),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: textColor,
+                  ),
                 ),
-                Text(
-                  '  Humidity: ${widget.day['daytimeForecast']?['humidity'] ?? ''}%',
-                ),
-                Text(
-                  '  Rain: ${widget.day['daytimeForecast']?['rainChance'] ?? ''}% (${widget.day['daytimeForecast']?['rainAmount'] ?? ''} mm)',
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Night: ${widget.day['nighttimeForecast']?['weatherCondition'] ?? ''}',
-                ),
-                Text(
-                  '  Humidity: ${widget.day['nighttimeForecast']?['humidity'] ?? ''}%',
-                ),
-                Text(
-                  '  Rain: ${widget.day['nighttimeForecast']?['rainChance'] ?? ''}% (${widget.day['nighttimeForecast']?['rainAmount'] ?? ''} mm)',
+                const SizedBox(height: 12),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1, // wider day column
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Day',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          if (day['daytimeForecast']?['icon'] != null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: WeatherIcon(
+                                iconBaseUrl: day['daytimeForecast']['icon'],
+                                size: 48,
+                              ),
+                            ),
+                          if (day['daytimeForecast']?['weatherCondition'] !=
+                              null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                day['daytimeForecast']['weatherCondition'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: textColor,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Humidity: ${day['daytimeForecast']?['humidity'] ?? ''}%',
+                            style: TextStyle(color: textColor),
+                          ),
+                          Text(
+                            'Rain: ${day['daytimeForecast']?['rainChance'] ?? ''}% (${(day['daytimeForecast']?['rainAmount'] != null ? (day['daytimeForecast']['rainAmount'] as num).toStringAsFixed(2) : '')} mm)',
+                            style: TextStyle(color: textColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 32),
+                    Expanded(
+                      flex: 1, // wider night column
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Night',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          if (day['nighttimeForecast']?['icon'] != null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: WeatherIcon(
+                                iconBaseUrl: day['nighttimeForecast']['icon'],
+                                size: 48,
+                              ),
+                            ),
+                          if (day['nighttimeForecast']?['weatherCondition'] !=
+                              null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                day['nighttimeForecast']['weatherCondition'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: textColor,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Humidity: ${day['nighttimeForecast']?['humidity'] ?? ''}%',
+                            style: TextStyle(color: textColor),
+                          ),
+                          Text(
+                            'Rain: ${day['nighttimeForecast']?['rainChance'] ?? ''}% (${(day['nighttimeForecast']?['rainAmount'] != null ? (day['nighttimeForecast']['rainAmount'] as num).toStringAsFixed(2) : '')} mm)',
+                            style: TextStyle(color: textColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Close', style: TextStyle(color: textColor)),
+        ),
       ],
     );
   }

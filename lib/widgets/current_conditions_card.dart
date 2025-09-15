@@ -39,9 +39,9 @@ Map<String, dynamic> extractConditions(Map<String, dynamic> conditionsData) {
     'description': data['weatherCondition']['description']['text'],
     'icon': data['weatherCondition']['iconBaseUri'],
     'feelsLike': data['feelsLikeTemperature']['degrees'],
-    'pressure':
-        data['airPressure']['meanSeaLevelMillibars'] *
-        0.1, // Convert hPa to kPa
+    'pressure': double.parse(
+      (data['airPressure']['meanSeaLevelMillibars'] * 0.1).toStringAsFixed(2),
+    ), // Convert hPa to kPa and round to 2 decimals
     'uvIndex': data['uvIndex'],
     'visibility': data['visibility']['distance'],
   };
