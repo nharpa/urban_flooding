@@ -116,3 +116,29 @@ Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
     return null;
   }
 }
+
+/// Fetches warnings from the API for the current device location.
+Future<Map<String, dynamic>?> fetchForCurrentLocation() async {
+  try {
+    Position? position = await getCurrentDeviceLocation();
+    if (position == null) return null;
+    double lat = position.latitude;
+    double lon = position.longitude;
+
+    final response = await http.post(
+      Uri.parse('$apiDomain/api/v1/warnings'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode({"lat": lat, "lon": lon}),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+}
