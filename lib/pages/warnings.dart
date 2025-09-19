@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urban_flooding/data/api_services.dart';
 
 class WarningsPage extends StatelessWidget {
   const WarningsPage({super.key});
@@ -9,7 +10,7 @@ class WarningsPage extends StatelessWidget {
         const Divider(thickness: 2),
         const SizedBox(height: 8),
         const Text(
-          'Current Flood Warnings',
+          'Current Weather Warnings',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
@@ -29,29 +30,51 @@ class WarningsPage extends StatelessWidget {
     );
   }
 
-  List<String> getSocialMediaPosts() {
-    // Replace with API call later
-    return [
-      'Flood warning issued for Riverdale. Stay alert and follow local advice.',
-      'Heavy rainfall expected tonight. Watch and act as needed.',
-      'Emergency services are on standby. Check official channels for updates.',
-    ];
+  Future<List<String>> getWarningsPosts() async {
+    final response = await fetchForCurrentLocation();
+    if (response == null ||
+        response['data'] == null ||
+        response['data']['warnings'] == null) {
+      return ['No warnings available at this time.'];
+    }
+    final warnings = response['data']['warnings'] as List<dynamic>;
+    if (warnings.isEmpty) {
+      return ['No warnings available at this time.'];
+    }
+    return warnings
+        .map<String>((w) => w['title'] as String? ?? '')
+        .where((t) => t.isNotEmpty)
+        .toList();
   }
 
-  Widget _buildSocialMediaCards() {
-    final posts = getSocialMediaPosts();
-    return Column(
-      children: posts
-          .map(
-            (post) => Card(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(post, style: const TextStyle(fontSize: 16)),
-              ),
-            ),
-          )
-          .toList(),
+  Widget _buildWarningsCards() {
+    return FutureBuilder<List<String>>(
+      future: getWarningsPosts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error loading warnings'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text('No warnings available at this time.'),
+          );
+        }
+        final posts = snapshot.data!;
+        return Column(
+          children: posts
+              .map(
+                (post) => Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(post, style: const TextStyle(fontSize: 16)),
+                  ),
+                ),
+              )
+              .toList(),
+        );
+      },
     );
   }
 
@@ -80,14 +103,14 @@ class WarningsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flood Warnings')),
+      appBar: AppBar(title: const Text('Weather Warnings')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTitle(),
-            _buildSocialMediaCards(),
+            _buildWarningsCards(),
             _buildContactsSection(),
           ],
         ),
