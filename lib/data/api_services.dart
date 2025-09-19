@@ -100,6 +100,34 @@ Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
   }
 }
 
+/// Gets the device's current location and queries the forecast API.
+Future<Map<String, dynamic>?> fetchWeatherHistoryForCurrentLocation() async {
+  try {
+    Position? position = await getCurrentDeviceLocation();
+    if (position == null) return null;
+    double lat = position.latitude;
+    double lon = position.longitude;
+
+    final url = Uri.parse('$apiDomain/api/v1/google/history');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode({"lat": lat, "lon": lon}),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+}
+
 /// Fetches all weather, hourly forecast, daily forecast, and rainfall data for the current location in a single call.
 Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
   try {
@@ -107,11 +135,18 @@ Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
       fetchHourlyForecastForCurrentLocation(),
       fetchDailyForecastForCurrentLocation(),
       fetchWeatherConditionForCurrentLocation(),
+      fetchWeatherHistoryForCurrentLocation(),
     ]);
     final hourly = results[0];
     final daily = results[1];
     final conditions = results[2];
-    return {'hourly': hourly, 'daily': daily, 'conditions': conditions};
+    final history = results[3];
+    return {
+      'hourly': hourly,
+      'daily': daily,
+      'conditions': conditions,
+      'history': history,
+    };
   } catch (e) {
     return null;
   }

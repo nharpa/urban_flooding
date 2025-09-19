@@ -23,7 +23,8 @@ class WeatherForecastPage extends StatelessWidget {
             return const Center(child: Text('No weather data available'));
           }
           final result = snapshot.data!;
-          final hourlyData = result['hourly'] ?? {};
+          final forecastHourlyData = result['hourly'] ?? {};
+          final historyHourlyData = result['history'] ?? {};
           final dailyData = result['daily'] ?? {};
           final conditionsData = result['conditions'] ?? {};
           return SingleChildScrollView(
@@ -39,14 +40,20 @@ class WeatherForecastPage extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
-                SizedBox(height: 200, child: ChanceOfRain(data: hourlyData)),
+                SizedBox(
+                  height: 200,
+                  child: ChanceOfRain(data: forecastHourlyData),
+                ),
                 const SizedBox(height: 24),
                 const Text(
                   'Current Rainfall (mm)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
-                SizedBox(height: 200, child: CurrentRainfall(data: hourlyData)),
+                SizedBox(
+                  height: 200,
+                  child: CurrentRainfall(data: historyHourlyData),
+                ),
               ],
             ),
           );

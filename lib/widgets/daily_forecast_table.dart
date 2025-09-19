@@ -45,7 +45,6 @@ List<Map<String, dynamic>> extractDailyForecast(
 }
 
 String formatDisplayDate(Map<String, dynamic>? dateMap) {
-  print('Received dateMap: $dateMap');
   if (dateMap == null) return '';
   final year = dateMap['year'] as int?;
   final month = dateMap['month'] as int?;
@@ -54,7 +53,6 @@ String formatDisplayDate(Map<String, dynamic>? dateMap) {
   final date = DateTime(year, month, day);
   const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   final weekday = weekdays[date.weekday - 1];
-  print('Formatted date: $weekday $day/$month');
   return '$weekday $day/$month';
 }
 

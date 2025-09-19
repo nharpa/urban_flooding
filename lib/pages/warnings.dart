@@ -10,7 +10,7 @@ class WarningsPage extends StatelessWidget {
         const Divider(thickness: 2),
         const SizedBox(height: 8),
         const Text(
-          'Current Flood Warnings',
+          'Current Weather Warnings',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
@@ -103,7 +103,7 @@ class WarningsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flood Warnings')),
+      appBar: AppBar(title: const Text('Weather Warnings')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
