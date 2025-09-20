@@ -70,24 +70,28 @@ class CurrentConditionsCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  children: [
-                    Padding(padding: const EdgeInsets.only(top: 10.0)),
-                    if (cond['icon'] != null)
-                      WeatherIcon(iconBaseUrl: cond['icon'], size: 48),
-                    if (cond['description'] != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Text(
-                          cond['description'],
-                          style: const TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Padding(padding: const EdgeInsets.only(top: 16.0)),
+                      if (cond['icon'] != null)
+                        WeatherIcon(iconBaseUrl: cond['icon'], size: 48),
+                      if (cond['description'] != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            cond['description'],
+                            style: const TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
