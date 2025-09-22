@@ -6,12 +6,9 @@ class HazardMapPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Full-screen map, no app bar; SafeArea to avoid notches
-    return const Scaffold(
-      body: SafeArea(
-        // Full screen Google Map using the reusable widget
-        child: AppGoogleMap(),
-      ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Hazard Map')),
+      body: const SafeArea(child: AppGoogleMap()),
     );
   }
 }
