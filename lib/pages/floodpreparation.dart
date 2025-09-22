@@ -104,13 +104,6 @@ class _FloodPreparationState extends State<FloodPreparation> {
                     'Emergency Help and Contact',
                     eduData['emergencyhelp'] ?? [],
                   ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/');
-                    },
-                    child: const Text('Return to Home'),
-                  ),
                 ],
               ),
             ),
