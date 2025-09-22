@@ -9,5 +9,10 @@
     "Relocation items including sleeping bags, tents, pen and paper and pass-time activities"
   ],
   "petsandlivestock": [],
-  "emergencyhelp": []
+  "emergencyhelp": [],
+  "leave": [
+    "Avoid walking, swimming, playing or driving in or through floodwaters, as they can be dangerous and contain toxic waste.",
+    "If roads become flooded, avoid driving through the floodwater and go another way"
+  ],
+  "stuck": []
 }

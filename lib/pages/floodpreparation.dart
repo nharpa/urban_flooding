@@ -104,6 +104,15 @@ class _FloodPreparationState extends State<FloodPreparation> {
                     'Emergency Help and Contact',
                     eduData['emergencyhelp'] ?? [],
                   ),
+                  _buildTitle(),
+                  _buildCollapsibleCard(
+                    'Advise to Leave/ Leaving',
+                    eduData['leave'] ?? [],
+                  ),
+                  _buildCollapsibleCard(
+                    'Unable to Leave',
+                    eduData['stuck'] ?? [],
+                  ),
                 ],
               ),
             ),
