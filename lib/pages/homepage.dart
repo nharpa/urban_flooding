@@ -3,32 +3,16 @@ import 'package:urban_flooding/widgets/home_page_button.dart';
 import 'package:urban_flooding/pages/floodpreparation.dart';
 import 'package:urban_flooding/widgets/weather_card.dart';
 import 'package:urban_flooding/pages/weatherforcast.dart';
+import 'package:urban_flooding/pages/hazardmap.dart';
 import 'package:urban_flooding/pages/warnings.dart';
 import 'package:urban_flooding/pages/login.dart';
+import 'package:urban_flooding/widgets/app_google_map.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
   Widget _buildMapPlaceholder() {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[100],
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Center(
-          child: Text(
-            'Map',
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.black54,
-            ),
-          ),
-        ),
-      ),
-    );
+    return AspectRatio(aspectRatio: 1, child: const AppGoogleMap());
   }
 
   Widget _buildButtonGrid(BuildContext context) {
@@ -45,8 +29,15 @@ class Homepage extends StatelessWidget {
           children: [
             Expanded(
               child: HomePageButton(
-                buttonText: "Hazard Map (soonTM)",
-                onPressed: () {},
+                buttonText: "Hazard Map",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HazardMapPage(),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(width: 16), // spacing between buttons
