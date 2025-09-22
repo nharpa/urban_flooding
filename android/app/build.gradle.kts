@@ -5,6 +5,31 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Load MAPS_API_KEY from .env (prefer project root ../.env)
+fun loadEnvVar(name: String): String {
+    val candidates = listOf("../.env", ".env")
+    for (path in candidates) {
+        val f = rootProject.file(path)
+        if (f.exists()) {
+            try {
+                val lines = f.readLines()
+                for (line in lines) {
+                    val trimmed = line.trim()
+                    if (trimmed.startsWith("$name=")) {
+                        var v = trimmed.substringAfter("=").trim()
+                        // Strip surrounding quotes if present
+                        if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith('\'') && v.endsWith('\''))) {
+                            v = v.substring(1, v.length - 1)
+                        }
+                        return v
+                    }
+                }
+            } catch (_: Exception) {}
+        }
+    }
+    return System.getenv(name) ?: ""
+}
+
 android {
     namespace = "com.example.urban_flooding"
     compileSdk = flutter.compileSdkVersion
@@ -28,6 +53,14 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        val mapsKey = loadEnvVar("MAPS_API_KEY")
+        if (mapsKey.isEmpty()) {
+            println("[Warning] MAPS_API_KEY not found in .env or environment.")
+        } else {
+            println("[Info] Injecting MAPS_API_KEY from .env")
+        }
+        manifestPlaceholders["MAPS_API_KEY"] = mapsKey
     }
 
     buildTypes {
