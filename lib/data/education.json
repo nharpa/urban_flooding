@@ -1,18 +1,59 @@
 {
-  "prepare": [],
+  "prepare": [
+    "Check home, contents and car insurances and ensure they are correct and up to date.",
+    "Identify water, gas and electricity mains, and know how to turn them off.",
+    "Purchase and safely store emergency equipment, including storage for drinking water, fuel supplies and hessian bags for sandbags.",
+    "Ensure all poisons and chemicals are safely stored well above ground level.",
+    "Identify and raise precious items securely if floodwaters are to threaten your home.",
+    "Consider and implement carpet floor covering alternatives. ",
+    "Relocate electricity sockets and power points to above floor level."
+  ],
   "emergencykit": [
     "Enough food/water for five to seven days, clothing and important documents including identification and insurance, medication, cash/bank cards and battery-operated radio. Include spare batteries.",
     "Mobile device charges.",
     "Include a complete first aid kit & toiletries.",
     "Spare house and car keys",
-    "Requirements for infants, elderly and sick/injured/ people with a disability",
+    "Required equipment for infants, elderly and sick/injured/ people with a disability",
     "Relocation items including sleeping bags, tents, pen and paper and pass-time activities"
   ],
-  "petsandlivestock": [],
-  "emergencyhelp": [],
+  "petsandlivestock": [
+    "Ensure that all pets are properly identified with their name tags and or microchips, and also have an up to date photo of them.",
+    "Ensure they have sufficient non-perishable food and their water/feed bowls.",
+    "Have their leash and carry cage on hand.",
+    "Include their essential medications, medical history and have up to date vet contact details.",
+    "Prepare where pets will take shelter during the flood as only guide and assistant dogs are allowed at evacuation centres.",
+    "Ensure stock registers for livestock are current and up to date.",
+    "Know when the animals should be relocated and where they will be going.",
+    "Lock gates to avoid animals wondering onto the road.",
+    "Mark all gates and water locations present on your property, and have this map available quickly if needed.",
+    "If circumstances become extreme, the best option for stock removal may be to cut fences so stock can escape danger, and be collected later."
+  ],
+  "emergencyhelp": [
+    "General Emergencies: Tripple Zero (000) ",
+    "Main Roads WA Phone Number: 138 138. Website: mainroads.wa.gov.au",
+    "WA State Emergency Service: 132 500 ",
+    "DFES Emergency Information Hotline: 13 3337 .",
+    "DFES Website: dfes.wa.gov.au X (Twitter): @dfes_wa . Facebook: Department of Fire and Emergency Services (DFESWA) ",
+    "Additional National Warning Summaries provided by BOM and EmergencyWA"
+  ],
   "leave": [
     "Avoid walking, swimming, playing or driving in or through floodwaters, as they can be dangerous and contain toxic waste.",
-    "If roads become flooded, avoid driving through the floodwater and go another way"
+    "If roads become flooded, avoid driving through the floodwater and go another way",
+    "If driving and the car stalls in floodwater, abandon it immediately and seek shelter elsewhere above the water.",
+    "Ensure all supplies and emergency kit are with you and easily accessible.",
+    "If safe to do so, turn off electricity, gas and water and lock doors and windows before departing.",
+    "Do not return to evacuated areas until told by emergency services that it is safe to do so.",
+    "Radio is the best and most reliable source of information during outages, so have a battery powered radio present."
   ],
-  "stuck": []
+  "stuck": [
+    "Inform family, friends and/or authorities that you are staying and where you are staying.",
+    "Do not leave your current location and find the highest safest point, which could include upstairs or the roof.  If outside, find the safest indoor location on high ground.",
+    "If no shelter is available, find high ground away from trees, as they can fall in oversaturated ground.",
+    "Avoid fallen powerlines, broken water and sewage lines, and any loose roof sheeting or other debris.",
+    "Note that emergency services may not be able to come to the building’s door.",
+    "Avoid waterways and river systems, including storm drains and pipes, ditches and ravines as they can become hazardous.",
+    "Keep updated regularly with emergency services for updates.",
+    "Ensure that emergency kit is prepared and easily accessible from your location.",
+    "Radio is the best and most reliable source of information during outages, so have a battery powered radio present."
+  ]
 }
