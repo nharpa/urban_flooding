@@ -30,14 +30,9 @@ class Homepage extends StatelessWidget {
           children: [
             Expanded(
               child: HomePageButton(
-                buttonText: "Hazard Map",
+                buttonText: "Report an Issue",
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HazardMapPage(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/report');
                 },
               ),
             ),
@@ -90,20 +85,6 @@ class Homepage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: HomePageButton(
-                buttonText: "Report an Issue",
-                onPressed: () {
-                  Navigator.pushNamed(context, '/report');
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-            const Expanded(child: SizedBox()),
-          ],
-        ),
       ],
     );
   }
