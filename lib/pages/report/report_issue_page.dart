@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:urban_flooding/widgets/home_page_button.dart' as uf_widgets;
 
 class ReportIssuePage extends StatefulWidget {
   const ReportIssuePage({super.key});
@@ -166,7 +167,7 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                       .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                       .toList(),
                   onChanged: (v) => setState(() => _selectedType = v),
-                  value: _selectedType,
+                  initialValue: _selectedType,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
@@ -255,25 +256,17 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                 Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton(
+                      child: uf_widgets.HomePageButton(
+                        buttonText: 'Cancel',
                         onPressed: () =>
                             Navigator.popUntil(context, (r) => r.isFirst),
-                        child: const Text('Cancel'),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: _submitting ? null : _submit,
-                        child: _submitting
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Text('Submit'),
+                      child: uf_widgets.HomePageButton(
+                        buttonText: _submitting ? 'Submitting…' : 'Submit',
+                        onPressed: _submitting ? () {} : _submit,
                       ),
                     ),
                   ],

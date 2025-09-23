@@ -4,8 +4,8 @@ import 'theme/theme.dart';
 import 'package:urban_flooding/pages/homepage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:urban_flooding/pages/signup.dart';
-import 'package:urban_flooding/pages/reset_password.dart';
+import 'package:urban_flooding/pages/auth/signup.dart';
+import 'package:urban_flooding/pages/auth/reset_password.dart';
 import 'package:urban_flooding/pages/report/report_issue_page.dart';
 import 'package:urban_flooding/pages/report/report_confirmation_page.dart';
 

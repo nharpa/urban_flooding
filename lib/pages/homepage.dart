@@ -6,7 +6,7 @@ import 'package:urban_flooding/widgets/weather_card.dart';
 import 'package:urban_flooding/pages/weatherforcast.dart';
 import 'package:urban_flooding/pages/hazardmap.dart';
 import 'package:urban_flooding/pages/warnings.dart';
-import 'package:urban_flooding/pages/login.dart';
+import 'package:urban_flooding/pages/auth/login.dart';
 import 'package:urban_flooding/widgets/app_google_map.dart';
 
 class Homepage extends StatelessWidget {
