@@ -55,9 +55,7 @@ class _AppGoogleMapState extends State<AppGoogleMap> {
           permission == LocationPermission.deniedForever) {
         return;
       }
-      final pos = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium,
-      );
+      final pos = await Geolocator.getCurrentPosition();
       if (!mounted) return;
       final c = _controller;
       if (c != null) {

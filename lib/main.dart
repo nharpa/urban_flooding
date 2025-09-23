@@ -8,6 +8,7 @@ import 'package:urban_flooding/pages/auth/signup.dart';
 import 'package:urban_flooding/pages/auth/reset_password.dart';
 import 'package:urban_flooding/pages/report/report_issue_page.dart';
 import 'package:urban_flooding/pages/report/report_confirmation_page.dart';
+import 'package:urban_flooding/widgets/auth_gate.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +56,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/signup': (_) => const SignUpPage(),
         '/reset-password': (_) => const ResetPasswordPage(),
-        '/report': (_) => const ReportIssuePage(),
+        '/report': (_) => const AuthGate(child: ReportIssuePage()),
         '/report/confirmation': (_) => const ReportConfirmationPage(),
       },
     );
