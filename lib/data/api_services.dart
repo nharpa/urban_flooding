@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const String apiDomain = 'http://10.0.2.2:8000'; // Local Ip for Development
-// final String apiDomain = dotenv.env['API_DOMAIN'] ?? 'http://10.0.2.2:8000';
+// const String apiDomain = 'http://10.0.2.2:8000'; // Local Ip for Development
+final String apiDomain = dotenv.env['API_DOMAIN'] ?? 'http://10.0.2.2:8000';
 
 final String apiKey = dotenv.env['API_KEY'] ?? '';
 

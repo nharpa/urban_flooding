@@ -9,7 +9,7 @@
      <meta-data android:name="com.google.android.geo.API_KEY"
          android:value="${MAPS_API_KEY}"/>
         <activity
-            android:name=".MainActivity"
+            android:name="app.nharpa.dev.urban_flooding.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""

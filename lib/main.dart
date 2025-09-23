@@ -3,10 +3,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'theme/theme.dart';
 import 'package:urban_flooding/pages/homepage.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:urban_flooding/pages/signup.dart';
+import 'package:urban_flooding/pages/reset_password.dart';
+import 'package:urban_flooding/pages/report/report_issue_page.dart';
+import 'package:urban_flooding/pages/report/report_confirmation_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
+  // Initialize Firebase (guarded for web/non-configured platforms)
+  try {
+    await Firebase.initializeApp();
+  } catch (_) {
+    // If Firebase isn't configured yet, continue without crashing
+  }
   runApp(const MyApp());
 }
 
@@ -41,6 +52,12 @@ class _MyAppState extends State<MyApp> {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, // auto switch based on device
       home: const Homepage(),
+      routes: {
+        '/signup': (_) => const SignUpPage(),
+        '/reset-password': (_) => const ResetPasswordPage(),
+        '/report': (_) => const ReportIssuePage(),
+        '/report/confirmation': (_) => const ReportConfirmationPage(),
+      },
     );
   }
 }

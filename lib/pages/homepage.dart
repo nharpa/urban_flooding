@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:urban_flooding/widgets/home_page_button.dart';
 import 'package:urban_flooding/pages/floodpreparation.dart';
 import 'package:urban_flooding/widgets/weather_card.dart';
@@ -88,12 +89,85 @@ class Homepage extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: HomePageButton(
+                buttonText: "Report an Issue",
+                onPressed: () {
+                  Navigator.pushNamed(context, '/report');
+                },
+              ),
+            ),
+            const SizedBox(width: 16),
+            const Expanded(child: SizedBox()),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildWeatherWidget() {
     return WeatherCard();
+  }
+
+  Widget _buildAuthSection(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        if (user != null) {
+          final displayName = user.displayName?.trim();
+          final nameToShow = (displayName != null && displayName.isNotEmpty)
+              ? displayName
+              : (user.email ?? 'Signed in');
+          return Align(
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.account_circle, color: Colors.blueGrey),
+                const SizedBox(width: 8),
+                Text(
+                  nameToShow,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(width: 12),
+                TextButton.icon(
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                  },
+                  icon: const Icon(Icons.logout, size: 18),
+                  label: const Text('Sign out'),
+                ),
+              ],
+            ),
+          );
+        }
+        // Not signed in: show Log in/Sign up link
+        return Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            },
+            child: const Text(
+              'Log in/Sign up',
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -110,24 +184,7 @@ class Homepage extends StatelessWidget {
             _buildButtonGrid(context),
             const SizedBox(height: 15),
             _buildWeatherWidget(),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                },
-                child: const Text(
-                  'Log in/Sign up',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-            ),
+            _buildAuthSection(context),
           ],
         ),
       ),
