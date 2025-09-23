@@ -30,14 +30,14 @@ class _FloodPreparationState extends State<FloodPreparation> {
     });
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(String title) {
     return Column(
       children: [
         const Divider(thickness: 2),
         const SizedBox(height: 8),
-        const Text(
-          'Flood Preparation & Survival Guide',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
@@ -60,8 +60,12 @@ class _FloodPreparationState extends State<FloodPreparation> {
                   ? tips
                         .map(
                           (tip) => Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.circle, size: 8),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 6.0),
+                                child: Icon(Icons.circle, size: 8),
+                              ),
                               const SizedBox(width: 8),
                               Expanded(child: Text(tip)),
                             ],
@@ -87,7 +91,7 @@ class _FloodPreparationState extends State<FloodPreparation> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildTitle(),
+                  _buildTitle('Flood Preparation & Survival Guide'),
                   _buildCollapsibleCard(
                     'Preparing Your Home',
                     eduData['prepare'] ?? [],
@@ -104,7 +108,7 @@ class _FloodPreparationState extends State<FloodPreparation> {
                     'Emergency Help and Contact',
                     eduData['emergencyhelp'] ?? [],
                   ),
-                  _buildTitle(),
+                  _buildTitle('During a Flood'),
                   _buildCollapsibleCard(
                     'Advise to Leave/ Leaving',
                     eduData['leave'] ?? [],
