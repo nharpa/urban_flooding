@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "790966523721",
+    "project_id": "urban-flooding-auth",
+    "storage_bucket": "urban-flooding-auth.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790966523721:android:01224aa0876b3ab5562c98",
+        "android_client_info": {
+          "package_name": "app.nharpa.dev.urban_flooding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGq1aLsRTGJZQzPL7o24Z4Dbtq7ULfRDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
