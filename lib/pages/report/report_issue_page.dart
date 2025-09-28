@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:urban_flooding/widgets/home_page_button.dart' as uf_widgets;
+import 'package:urban_flooding/widgets/app_google_map.dart';
 
 class ReportIssuePage extends StatefulWidget {
   const ReportIssuePage({super.key});
@@ -118,45 +119,6 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // User + Location row
-                Row(
-                  children: [
-                    const Icon(Icons.person_outline),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        user?.displayName?.trim().isNotEmpty == true
-                            ? user!.displayName!
-                            : (user?.email ?? 'Anonymous user'),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.my_location_outlined),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _locating
-                          ? const Text('Getting location…')
-                          : Text(
-                              _position != null
-                                  ? 'Lat: ${_position!.latitude.toStringAsFixed(5)}, Lng: ${_position!.longitude.toStringAsFixed(5)}'
-                                  : 'Location unavailable',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                    ),
-                    IconButton(
-                      tooltip: 'Refresh location',
-                      onPressed: _locating ? null : _fetchLocation,
-                      icon: const Icon(Icons.refresh),
-                    ),
-                  ],
-                ),
-                const Divider(height: 24),
-
                 // Issue Type
                 const Text('What issue are you reporting?'),
                 const SizedBox(height: 8),
@@ -199,6 +161,75 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
                     ),
                     const SizedBox(width: 12),
                     Text('${_photos.length} selected'),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const Divider(height: 24),
+                // Small map centered on device location
+                if (_position != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SizedBox(
+                      height: 160,
+                      child: AppGoogleMap(
+                        initialLat: _position!.latitude,
+                        initialLon: _position!.longitude,
+                        initialZoom: 16,
+                        centerOnDevice: false,
+                        androidLiteMode: true,
+                        deviceZoom: 16,
+                      ),
+                    ),
+                  )
+                else
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: SizedBox(
+                      height: 160,
+                      child: AppGoogleMap(
+                        initialLat: -31.95,
+                        initialLon: 115.86,
+                        initialZoom: 11,
+                        centerOnDevice: false,
+                        androidLiteMode: true,
+                      ),
+                    ),
+                  ),
+                // location
+                Row(
+                  children: [
+                    const Icon(Icons.my_location_outlined),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _locating
+                          ? const Text('Getting location…')
+                          : Text(
+                              _position != null
+                                  ? 'Lat: ${_position!.latitude.toStringAsFixed(5)}, Lng: ${_position!.longitude.toStringAsFixed(5)}'
+                                  : 'Location unavailable',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                    ),
+                    IconButton(
+                      tooltip: 'Refresh location',
+                      onPressed: _locating ? null : _fetchLocation,
+                      icon: const Icon(Icons.refresh),
+                    ),
+                  ],
+                ),
+                // User + Location row
+                Row(
+                  children: [
+                    const Icon(Icons.person_outline),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        user?.displayName?.trim().isNotEmpty == true
+                            ? user!.displayName!
+                            : (user?.email ?? 'Anonymous user'),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
