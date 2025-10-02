@@ -1,0 +1,9 @@
+Issue reporting send to backend; for now just navigate to confirmation.
+Introduce risk/point request and show on home page weather widget 
+Add map bubble with flood risk attributes (nice to have)
+Add flood risk report page and workflow (see wireframes)
+BUG FIX - Currently the buttons at the bottom of my phone hide the login button 
+
+
+Themeing and Styling
+Update README and ensure code comments coverage
