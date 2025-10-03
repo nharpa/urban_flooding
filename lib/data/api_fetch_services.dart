@@ -90,11 +90,18 @@ Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
 
+    Map<String, dynamic>? weatherData;
     if (response.statusCode == 200) {
-      return jsonDecode(response.body) as Map<String, dynamic>;
+      weatherData = jsonDecode(response.body) as Map<String, dynamic>;
     } else {
       return null;
     }
+
+    // Fetch risk data and append to weatherData
+    final riskData = await fetchRiskForCurrentLocation();
+    weatherData['floodRisk'] = riskData?['data']?['risk_level'];
+
+    return weatherData;
   } catch (e) {
     return null;
   }
@@ -153,7 +160,7 @@ Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
 }
 
 /// Fetches warnings from the API for the current device location.
-Future<Map<String, dynamic>?> fetchForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchWarningsForCurrentLocation() async {
   try {
     Position? position = await getCurrentDeviceLocation();
     if (position == null) return null;
@@ -167,6 +174,38 @@ Future<Map<String, dynamic>?> fetchForCurrentLocation() async {
         if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({"lat": lat, "lon": lon}),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+}
+
+/// Fetches risk data from the API for the current device location.
+Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
+  String? rainfallEventId,
+}) async {
+  try {
+    Position? position = await getCurrentDeviceLocation();
+    if (position == null) return null;
+    double lat = position.latitude;
+    double lon = position.longitude;
+
+    final response = await http.post(
+      Uri.parse('$apiDomain/api/v1/risk'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode({
+        "lat": lat,
+        "lon": lon,
+        "rainfall_event_id": rainfallEventId ?? "none",
+      }),
     );
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;

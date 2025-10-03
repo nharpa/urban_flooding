@@ -90,7 +90,6 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
     });
 
     try {
-      // TODO: send to backend; for now just navigate to confirmation
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/report/confirmation');
     } catch (e) {

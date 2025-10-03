@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urban_flooding/data/api_services.dart';
+import 'package:urban_flooding/data/api_fetch_services.dart';
 
 class WarningsPage extends StatelessWidget {
   const WarningsPage({super.key});
@@ -31,7 +31,7 @@ class WarningsPage extends StatelessWidget {
   }
 
   Future<List<String>> getWarningsPosts() async {
-    final response = await fetchForCurrentLocation();
+    final response = await fetchWarningsForCurrentLocation();
     if (response == null ||
         response['data'] == null ||
         response['data']['warnings'] == null) {

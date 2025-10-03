@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urban_flooding/data/api_services.dart';
+import 'package:urban_flooding/data/api_fetch_services.dart';
 import 'package:urban_flooding/widgets/weather_icon.dart';
 
 class WeatherData {
@@ -37,13 +37,14 @@ Future<WeatherData?> getWeatherConditions() async {
       ? conditions['feels_like']
       : double.tryParse(conditions['feels_like'].toString()) ?? 0.0;
 
-  // String floodRisk = conditions['data']['floodRisk'];
+  // Use the floodRisk value from the API response
+  String floodRisk = response['floodRisk']?.toString() ?? 'Unknown';
 
   WeatherData weatherData = WeatherData(
     temperature: temperature,
     feelsLike: feelsLike,
     condition: condition,
-    floodRisk: 'tbc',
+    floodRisk: floodRisk,
     conditionIconCode: forecastIconUri,
   );
 
