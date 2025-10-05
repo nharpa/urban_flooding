@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 class AppGoogleMap extends StatefulWidget {
+  final LatLng? selectedPoint;
   final double initialLat;
   final double initialLon;
   final double initialZoom;
@@ -12,6 +13,7 @@ class AppGoogleMap extends StatefulWidget {
   final bool centerOnDevice;
   // Zoom level to use when centering on device
   final double deviceZoom;
+  final void Function(LatLng)? onTap;
   const AppGoogleMap({
     super.key,
     this.initialLat = -31.95,
@@ -20,6 +22,8 @@ class AppGoogleMap extends StatefulWidget {
     this.androidLiteMode = false,
     this.centerOnDevice = true,
     this.deviceZoom = 15.0,
+    this.onTap,
+    this.selectedPoint,
   });
 
   @override
@@ -91,6 +95,18 @@ class _AppGoogleMapState extends State<AppGoogleMap> {
                 // Try to center on device after map is ready
                 _centerOnDeviceIfPossible();
               },
+              onTap: widget.onTap,
+              markers: widget.selectedPoint == null
+                  ? {}
+                  : {
+                      Marker(
+                        markerId: const MarkerId('selected'),
+                        position: widget.selectedPoint!,
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueRed,
+                        ),
+                      ),
+                    },
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               // Keep native controls off to avoid duplicates; we add our own cross-platform buttons

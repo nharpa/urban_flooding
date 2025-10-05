@@ -20,6 +20,9 @@ class WeatherData {
 
 Future<WeatherData?> getWeatherConditions() async {
   final response = await fetchWeatherConditionForCurrentLocation();
+  final riskData = await fetchRiskForCurrentLocation(
+    rainfallEventId: "current",
+  );
   if (response == null) return null;
 
   final conditions = response['data']['conditions'];
@@ -37,9 +40,14 @@ Future<WeatherData?> getWeatherConditions() async {
       ? conditions['feels_like']
       : double.tryParse(conditions['feels_like'].toString()) ?? 0.0;
 
-  // Use the floodRisk value from the API response
-  String floodRisk = response['floodRisk']?.toString() ?? 'Unknown';
+  double riskPercent = riskData?['data']?['max_risk'] * 100 ?? 0.0;
 
+  String riskLevel = riskData?['data']?['risk_level']?.toString() ?? 'Unknown';
+  String maxRisk = riskPercent.toString();
+
+  String floodRisk = (riskLevel != 'Unknown')
+      ? '$riskLevel ($maxRisk%)'
+      : 'Unknown';
   WeatherData weatherData = WeatherData(
     temperature: temperature,
     feelsLike: feelsLike,

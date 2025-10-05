@@ -61,7 +61,6 @@ Future<Map<String, dynamic>?> submitUserReport({
       body.remove('user');
     }
 
-    print(body);
     final resp = await postJson('/api/v1/report', body);
     if (resp.statusCode >= 200 && resp.statusCode < 300) {
       try {

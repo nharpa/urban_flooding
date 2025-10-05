@@ -95,12 +95,7 @@ Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
       weatherData = jsonDecode(response.body) as Map<String, dynamic>;
     } else {
       return null;
-    }
-
-    // Fetch risk data and append to weatherData
-    final riskData = await fetchRiskForCurrentLocation();
-    weatherData['floodRisk'] = riskData?['data']?['risk_level'];
-
+    } // Fetch risk data and append to weatherData
     return weatherData;
   } catch (e) {
     return null;
@@ -135,30 +130,6 @@ Future<Map<String, dynamic>?> fetchWeatherHistoryForCurrentLocation() async {
   }
 }
 
-/// Fetches all weather, hourly forecast, daily forecast, and rainfall data for the current location in a single call.
-Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
-  try {
-    final results = await Future.wait([
-      fetchHourlyForecastForCurrentLocation(),
-      fetchDailyForecastForCurrentLocation(),
-      fetchWeatherConditionForCurrentLocation(),
-      fetchWeatherHistoryForCurrentLocation(),
-    ]);
-    final hourly = results[0];
-    final daily = results[1];
-    final conditions = results[2];
-    final history = results[3];
-    return {
-      'hourly': hourly,
-      'daily': daily,
-      'conditions': conditions,
-      'history': history,
-    };
-  } catch (e) {
-    return null;
-  }
-}
-
 /// Fetches warnings from the API for the current device location.
 Future<Map<String, dynamic>?> fetchWarningsForCurrentLocation() async {
   try {
@@ -188,12 +159,21 @@ Future<Map<String, dynamic>?> fetchWarningsForCurrentLocation() async {
 /// Fetches risk data from the API for the current device location.
 Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
   String? rainfallEventId,
+  double? lat,
+  double? lon,
 }) async {
   try {
-    Position? position = await getCurrentDeviceLocation();
-    if (position == null) return null;
-    double lat = position.latitude;
-    double lon = position.longitude;
+    double latitude;
+    double longitude;
+    if (lat != null && lon != null) {
+      latitude = lat;
+      longitude = lon;
+    } else {
+      Position? position = await getCurrentDeviceLocation();
+      if (position == null) return null;
+      latitude = position.latitude;
+      longitude = position.longitude;
+    }
 
     final response = await http.post(
       Uri.parse('$apiDomain/api/v1/risk'),
@@ -202,8 +182,8 @@ Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
         if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({
-        "lat": lat,
-        "lon": lon,
+        "lat": latitude,
+        "lon": longitude,
         "rainfall_event_id": rainfallEventId ?? "none",
       }),
     );
@@ -212,6 +192,33 @@ Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
     } else {
       return null;
     }
+  } catch (e) {
+    return null;
+  }
+}
+
+/// Fetches all weather, hourly forecast, daily forecast, and rainfall data for the current location in a single call.
+Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
+  try {
+    final results = await Future.wait([
+      fetchHourlyForecastForCurrentLocation(),
+      fetchDailyForecastForCurrentLocation(),
+      fetchWeatherConditionForCurrentLocation(),
+      fetchWeatherHistoryForCurrentLocation(),
+      fetchRiskForCurrentLocation(rainfallEventId: "current"),
+    ]);
+    final hourly = results[0];
+    final daily = results[1];
+    final conditions = results[2];
+    final history = results[3];
+    final risk = results[4];
+    return {
+      'hourly': hourly,
+      'daily': daily,
+      'conditions': conditions,
+      'history': history,
+      'risk': risk,
+    };
   } catch (e) {
     return null;
   }

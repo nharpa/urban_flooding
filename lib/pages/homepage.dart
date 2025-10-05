@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:urban_flooding/widgets/home_page_button.dart';
 import 'package:urban_flooding/pages/floodpreparation.dart';
-import 'package:urban_flooding/widgets/weather_card.dart';
 import 'package:urban_flooding/pages/weatherforcast.dart';
 import 'package:urban_flooding/pages/warnings.dart';
+import 'package:urban_flooding/pages/riskcalculatorpage.dart';
 import 'package:urban_flooding/pages/auth/login.dart';
+import 'package:urban_flooding/widgets/home_page_button.dart';
 import 'package:urban_flooding/widgets/app_google_map.dart';
+import 'package:urban_flooding/widgets/weather_card.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
   Widget _buildMapPlaceholder() {
-    return AspectRatio(aspectRatio: 1, child: const AppGoogleMap());
+    // Make the map smaller (e.g., 0.7 aspect ratio)
+    return AspectRatio(aspectRatio: 1.4, child: const AppGoogleMap());
   }
 
   Widget _buildButtonGrid(BuildContext context) {
@@ -35,7 +37,7 @@ class Homepage extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(width: 16), // spacing between buttons
+            const SizedBox(width: 16),
             Expanded(
               child: HomePageButton(
                 buttonText: "Flood Preparation",
@@ -51,7 +53,7 @@ class Homepage extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16), // spacing between rows
+        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
@@ -76,6 +78,25 @@ class Homepage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const WarningsPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        // New row for Flood Risk button
+        Row(
+          children: [
+            Expanded(
+              child: HomePageButton(
+                buttonText: "Flood Risk",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RiskCalculatorPage(),
                     ),
                   );
                 },

@@ -25,11 +25,19 @@ String? _windCardinalShort(String? cardinal) {
 }
 
 // Helper to extract and format current conditions data for the card
-Map<String, dynamic> extractConditions(Map<String, dynamic> conditionsData) {
+Map<String, dynamic> extractConditions(
+  Map<String, dynamic> conditionsData,
+  Map<String, dynamic> floodRiskData,
+) {
   final data = conditionsData['data']?['weatherConditions'] ?? {};
   final wind = data['wind'] ?? {};
   final windDir = wind['direction'] ?? {};
   final windSpeed = wind['speed'] ?? {};
+  final risk = floodRiskData['data'] ?? {};
+  final riskLevel = risk['risk_level']?.toString() ?? 'Unknown';
+  final maxRisk = (risk['max_risk'] != null)
+      ? (risk['max_risk'] * 100).toStringAsFixed(1)
+      : 'Unknown';
   return {
     'temperature': data['temperature']['degrees'],
     'humidity': data['relativeHumidity'],
@@ -44,16 +52,22 @@ Map<String, dynamic> extractConditions(Map<String, dynamic> conditionsData) {
     ), // Convert hPa to kPa and round to 2 decimals
     'uvIndex': data['uvIndex'],
     'visibility': data['visibility']['distance'],
+    'riskLevel': '$riskLevel ($maxRisk%)',
   };
 }
 
 class CurrentConditionsCard extends StatelessWidget {
   final Map<String, dynamic> conditionsData;
-  const CurrentConditionsCard({super.key, required this.conditionsData});
+  final Map<String, dynamic> floodRiskData;
+  const CurrentConditionsCard({
+    super.key,
+    required this.conditionsData,
+    required this.floodRiskData,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final cond = extractConditions(conditionsData);
+    final cond = extractConditions(conditionsData, floodRiskData);
     return Card(
       elevation: 3,
       margin: const EdgeInsets.only(bottom: 20),
@@ -112,6 +126,8 @@ class CurrentConditionsCard extends StatelessWidget {
                         Text('UV Index: ${cond['uvIndex']}'),
                       if (cond['visibility'] != null)
                         Text('Visibility: ${cond['visibility']} km'),
+                      if (cond['riskLevel'] != null)
+                        Text('Flood Risk: ${cond['riskLevel']}'),
                     ],
                   ),
                 ),

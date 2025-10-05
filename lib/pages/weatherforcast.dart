@@ -27,12 +27,17 @@ class WeatherForecastPage extends StatelessWidget {
           final historyHourlyData = result['history'] ?? {};
           final dailyData = result['daily'] ?? {};
           final conditionsData = result['conditions'] ?? {};
+          final floodRiskData = result['risk'] ?? {};
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CurrentConditionsCard(conditionsData: conditionsData),
+                CurrentConditionsCard(
+                  conditionsData: conditionsData,
+                  floodRiskData: floodRiskData,
+                ),
+                const SizedBox(height: 16),
                 DailyForecastTable(dailyData: dailyData),
                 const SizedBox(height: 24),
                 const Text(
