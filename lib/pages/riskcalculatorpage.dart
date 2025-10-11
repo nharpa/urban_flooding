@@ -34,10 +34,19 @@ class _RiskCalculatorPageState extends State<RiskCalculatorPage> {
   void _showFloodRiskDialog(Position? pos, String rainfallEventId) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        content: SizedBox(
-          width: 400,
-          child: FloodRiskCard(location: pos, rainfallEventId: rainfallEventId),
+      builder: (context) => Dialog(
+        insetPadding: const EdgeInsets.all(16.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
+          child: SingleChildScrollView(
+            child: FloodRiskCard(
+              location: pos,
+              rainfallEventId: rainfallEventId,
+            ),
+          ),
         ),
       ),
     );
