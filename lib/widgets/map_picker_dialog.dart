@@ -19,7 +19,7 @@ class MapPickerDialog extends StatefulWidget {
 
 class _MapPickerDialogState extends State<MapPickerDialog> {
   LatLng? _selectedLatLng;
-  GoogleMapController? _controller;
+  // GoogleMapController? _controller; // Removed unused field
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _MapPickerDialogState extends State<MapPickerDialog> {
             target: LatLng(widget.initialLat, widget.initialLon),
             zoom: widget.initialZoom,
           ),
-          onMapCreated: (c) => _controller = c,
+          onMapCreated: (c) {}, // Removed assignment to unused field
           onTap: (latLng) {
             setState(() {
               _selectedLatLng = latLng;

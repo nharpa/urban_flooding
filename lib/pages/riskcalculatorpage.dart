@@ -26,7 +26,8 @@ class _RiskCalculatorPageState extends State<RiskCalculatorPage> {
     {'name': '50-year return period design storm', 'id': 'design_50yr'},
     {'name': '100-year return period design storm', 'id': 'design_100yr'},
     {'name': 'Perth 2024 historical storm', 'id': 'perth_historical_2024'},
-    {'name': 'Current Weather Observations', 'id': 'current'},
+    {'name': 'Last 24 Hours Observations', 'id': 'current'},
+    {'name': 'Forecast next 24 Hours', 'id': 'forecast'},
     {'name': 'Custom', 'id': 'custom'},
   ];
 
@@ -41,8 +42,6 @@ class _RiskCalculatorPageState extends State<RiskCalculatorPage> {
       ),
     );
   }
-
-  // TODO: Implement map picker and geolocation logic
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +145,6 @@ class _RiskCalculatorPageState extends State<RiskCalculatorPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  // TODO: If not using current location, get selectedPosition from map picker
                   Position? pos;
                   if (useCurrentLocation) {
                     pos = null; // FloodRiskCard will use device location

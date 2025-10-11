@@ -31,7 +31,5 @@ flutter:
   uses-material-design: true
   assets:
   - lib/assets/
-  - lib/assets/day/
-  - lib/assets/night/
   - lib/data/
   - .env

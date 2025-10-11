@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: screenHeight / 3,
                 child: SvgPicture.asset(
-                  'lib/assets/black_swan_logo.svg',
+                  'lib/assets/swan.svg',
                   fit: BoxFit.contain,
                 ),
               ),
