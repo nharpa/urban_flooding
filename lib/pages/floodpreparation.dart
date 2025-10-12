@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:urban_flooding/widgets/emergency_help_item.dart';
 
 class FloodPreparation extends StatefulWidget {
   const FloodPreparation({super.key});
@@ -10,7 +11,7 @@ class FloodPreparation extends StatefulWidget {
 }
 
 class _FloodPreparationState extends State<FloodPreparation> {
-  Map<String, List<String>> eduData = {};
+  Map<String, dynamic> eduData = {};
   bool _loading = true;
 
   @override
@@ -25,7 +26,14 @@ class _FloodPreparationState extends State<FloodPreparation> {
     );
     final Map<String, dynamic> jsonMap = json.decode(jsonString);
     setState(() {
-      eduData = jsonMap.map((k, v) => MapEntry(k, List<String>.from(v)));
+      eduData = jsonMap.map((k, v) {
+        // Special case for emergencyhelp - keep as dynamic objects
+        if (k == 'emergencyhelp') {
+          return MapEntry(k, v);
+        }
+        // For other sections, convert to List<String> as before
+        return MapEntry(k, List<String>.from(v));
+      });
       _loading = false;
     });
   }
@@ -80,6 +88,34 @@ class _FloodPreparationState extends State<FloodPreparation> {
     );
   }
 
+  Widget _buildEmergencyHelpCard(String title, List<dynamic> helpItems) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ExpansionTile(
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16, bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: helpItems.isNotEmpty
+                  ? helpItems
+                        .map(
+                          (item) => EmergencyHelpItem(
+                            item: item is Map<String, dynamic>
+                                ? item
+                                : {'text': item.toString(), 'type': 'text'},
+                          ),
+                        )
+                        .toList()
+                  : [const Text('None available.')],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,28 +130,28 @@ class _FloodPreparationState extends State<FloodPreparation> {
                   _buildTitle('Flood Preparation & Survival Guide'),
                   _buildCollapsibleCard(
                     'Preparing Your Home',
-                    eduData['prepare'] ?? [],
+                    List<String>.from(eduData['prepare'] ?? []),
                   ),
                   _buildCollapsibleCard(
                     'Emergency Kit ',
-                    eduData['emergencykit'] ?? [],
+                    List<String>.from(eduData['emergencykit'] ?? []),
                   ),
                   _buildCollapsibleCard(
                     'Pets and Livestock',
-                    eduData['petsandlivestock'] ?? [],
+                    List<String>.from(eduData['petsandlivestock'] ?? []),
                   ),
-                  _buildCollapsibleCard(
+                  _buildEmergencyHelpCard(
                     'Emergency Help and Contact',
                     eduData['emergencyhelp'] ?? [],
                   ),
                   _buildTitle('During a Flood'),
                   _buildCollapsibleCard(
                     'Advise to Leave/ Leaving',
-                    eduData['leave'] ?? [],
+                    List<String>.from(eduData['leave'] ?? []),
                   ),
                   _buildCollapsibleCard(
                     'Unable to Leave',
-                    eduData['stuck'] ?? [],
+                    List<String>.from(eduData['stuck'] ?? []),
                   ),
                 ],
               ),

@@ -78,28 +78,6 @@ class WarningsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContactsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 24),
-        const Text(
-          'Further Help and Contacts',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 2, bottom: 12),
-          height: 2,
-          color: Colors.blueGrey,
-        ),
-        const Text('SES: 132 500'),
-        const Text('Emergency: 000'),
-        const Text('Local Council: 1234 5678'),
-        const Text('Flood Info Line: 1800 123 456'),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,11 +86,7 @@ class WarningsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTitle(),
-            _buildWarningsCards(),
-            _buildContactsSection(),
-          ],
+          children: [_buildTitle(), _buildWarningsCards()],
         ),
       ),
     );

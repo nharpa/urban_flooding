@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "flutter analyze (quick)",
+			"type": "shell",
+			"command": "flutter analyze lib/pages/report/report_issue_page.dart",
+			"isBackground": false,
+			"problemMatcher": [
+				"$dart-analysis"
+			],
+			"group": "build"
+		}
+	]
+}

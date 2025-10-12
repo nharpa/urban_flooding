@@ -29,12 +29,48 @@
     "If circumstances become extreme, the best option for stock removal may be to cut fences so stock can escape danger, and be collected later."
   ],
   "emergencyhelp": [
-    "General Emergencies: Tripple Zero (000) ",
-    "Main Roads WA Phone Number: 138 138. Website: mainroads.wa.gov.au",
-    "WA State Emergency Service: 132 500 ",
-    "DFES Emergency Information Hotline: 13 3337 .",
-    "DFES Website: dfes.wa.gov.au X (Twitter): @dfes_wa . Facebook: Department of Fire and Emergency Services (DFESWA) ",
-    "Additional National Warning Summaries provided by BOM and EmergencyWA"
+    {
+      "text": "General Emergencies: ",
+      "phone": "000",
+      "type": "phone"
+    },
+    {
+      "text": "Main Roads WA Phone Number: ",
+      "phone": "138138",
+      "website": "https://mainroads.wa.gov.au",
+      "type": "both"
+    },
+    {
+      "text": "WA State Emergency Service: ",
+      "phone": "132500",
+      "type": "phone"
+    },
+    {
+      "text": "DFES Emergency Information Hotline: ",
+      "phone": "133337",
+      "type": "phone"
+    },
+    {
+      "text": "DFES Website: ",
+      "website": "https://dfes.wa.gov.au",
+      "social": [
+        {
+          "platform": "Twitter/X",
+          "handle": "@dfes_wa",
+          "url": "https://twitter.com/dfes_wa"
+        },
+        {
+          "platform": "Facebook",
+          "handle": "Department of Fire and Emergency Services (DFESWA)",
+          "url": "https://facebook.com/DFESWA"
+        }
+      ],
+      "type": "website_social"
+    },
+    {
+      "text": "Additional National Warning Summaries provided by BOM and EmergencyWA",
+      "type": "text"
+    }
   ],
   "leave": [
     "Avoid walking, swimming, playing or driving in or through floodwaters, as they can be dangerous and contain toxic waste.",

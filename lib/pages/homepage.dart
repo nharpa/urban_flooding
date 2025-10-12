@@ -31,9 +31,14 @@ class Homepage extends StatelessWidget {
           children: [
             Expanded(
               child: HomePageButton(
-                buttonText: "Report an Issue",
+                buttonText: "Weather",
                 onPressed: () {
-                  Navigator.pushNamed(context, '/report');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WeatherForecastPage(),
+                    ),
+                  );
                 },
               ),
             ),
@@ -58,20 +63,6 @@ class Homepage extends StatelessWidget {
           children: [
             Expanded(
               child: HomePageButton(
-                buttonText: "Weather",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const WeatherForecastPage(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: HomePageButton(
                 buttonText: "Warnings",
                 onPressed: () {
                   Navigator.push(
@@ -80,6 +71,15 @@ class Homepage extends StatelessWidget {
                       builder: (context) => const WarningsPage(),
                     ),
                   );
+                },
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: HomePageButton(
+                buttonText: "Report an Issue",
+                onPressed: () {
+                  Navigator.pushNamed(context, '/report');
                 },
               ),
             ),

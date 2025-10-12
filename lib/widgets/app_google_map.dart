@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 class AppGoogleMap extends StatefulWidget {
@@ -90,6 +92,13 @@ class _AppGoogleMapState extends State<AppGoogleMap> {
                 target: LatLng(widget.initialLat, widget.initialLon),
                 zoom: widget.initialZoom,
               ),
+              // Ensure the map eagerly claims gestures so it can pan/zoom
+              // inside scrollable parents like SingleChildScrollView.
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                Factory<OneSequenceGestureRecognizer>(
+                  () => EagerGestureRecognizer(),
+                ),
+              },
               onMapCreated: (c) {
                 _controller = c;
                 // Try to center on device after map is ready
@@ -112,6 +121,11 @@ class _AppGoogleMapState extends State<AppGoogleMap> {
               // Keep native controls off to avoid duplicates; we add our own cross-platform buttons
               zoomControlsEnabled: false,
               liteModeEnabled: widget.androidLiteMode,
+              // Enable all gestures explicitly
+              scrollGesturesEnabled: true,
+              zoomGesturesEnabled: true,
+              tiltGesturesEnabled: true,
+              rotateGesturesEnabled: true,
             ),
           ),
           // Zoom controls overlay (cross-platform)

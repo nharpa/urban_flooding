@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
   bool _submitting = false;
   String? _error;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -94,10 +95,27 @@ class _LoginPageState extends State<LoginPage> {
               const Text('Password:', style: TextStyle(fontSize: 16)),
               TextField(
                 controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                obscureText: _obscurePassword,
+                obscuringCharacter: '•',
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
                   hintText: 'Enter your password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
