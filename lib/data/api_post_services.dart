@@ -20,13 +20,22 @@ Future<http.Response> postJson(
   String path,
   Map<String, dynamic> body, {
   Map<String, String>? headers,
+  http.Client? client,
 }) async {
-  final resp = await http.post(
-    Uri.parse('$apiDomain$path'),
-    headers: _authHeaders(extra: headers),
-    body: jsonEncode(body),
-  );
-  return resp;
+  final http.Client c = client ?? http.Client();
+  try {
+    final resp = await c.post(
+      Uri.parse('$apiDomain$path'),
+      headers: _authHeaders(extra: headers),
+      body: jsonEncode(body),
+    );
+    return resp;
+  } finally {
+    if (client == null) {
+      // Only close if we created the client
+      c.close();
+    }
+  }
 }
 
 /// Submit a user report to the backend API.
@@ -37,6 +46,7 @@ Future<Map<String, dynamic>?> submitUserReport({
   String? userUid,
   String? userDisplayName,
   String? userEmail,
+  http.Client? client,
 }) async {
   try {
     if (issueType.trim().isEmpty || description.trim().isEmpty) {
@@ -61,7 +71,11 @@ Future<Map<String, dynamic>?> submitUserReport({
       body.remove('user');
     }
 
-    final resp = await postJson('/api/v1/report', body);
+    final resp = await postJson(
+      '/api/v1/report',
+      body,
+      client: client,
+    );
     if (resp.statusCode >= 200 && resp.statusCode < 300) {
       try {
         return jsonDecode(resp.body) as Map<String, dynamic>;

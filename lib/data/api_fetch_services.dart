@@ -21,14 +21,17 @@ Future<Position?> getCurrentDeviceLocation() async {
 }
 
 /// Fetches the hourly forecast for the current location.
-Future<Map<String, dynamic>?> fetchHourlyForecastForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchHourlyForecastForCurrentLocation({
+  Position? pos,
+  http.Client? client,
+}) async {
   try {
-    Position? position = await getCurrentDeviceLocation();
+    Position? position = pos ?? await getCurrentDeviceLocation();
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
-
-    final response = await http.post(
+    final http.Client c = client ?? http.Client();
+    final response = await c.post(
       Uri.parse('$apiDomain/api/v1/google/forecast/hourly'),
       headers: {
         'Content-Type': 'application/json',
@@ -36,6 +39,7 @@ Future<Map<String, dynamic>?> fetchHourlyForecastForCurrentLocation() async {
       },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
+    if (client == null) c.close();
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
@@ -47,14 +51,17 @@ Future<Map<String, dynamic>?> fetchHourlyForecastForCurrentLocation() async {
 }
 
 /// Fetches the daily forecast for the current location.
-Future<Map<String, dynamic>?> fetchDailyForecastForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchDailyForecastForCurrentLocation({
+  Position? pos,
+  http.Client? client,
+}) async {
   try {
-    Position? position = await getCurrentDeviceLocation();
+    Position? position = pos ?? await getCurrentDeviceLocation();
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
-
-    final response = await http.post(
+    final http.Client c = client ?? http.Client();
+    final response = await c.post(
       Uri.parse('$apiDomain/api/v1/google/forecast/daily'),
       headers: {
         'Content-Type': 'application/json',
@@ -62,6 +69,7 @@ Future<Map<String, dynamic>?> fetchDailyForecastForCurrentLocation() async {
       },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
+    if (client == null) c.close();
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
@@ -73,15 +81,19 @@ Future<Map<String, dynamic>?> fetchDailyForecastForCurrentLocation() async {
 }
 
 /// Gets the device's current location and queries the forecast API.
-Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation({
+  Position? pos,
+  http.Client? client,
+}) async {
   try {
-    Position? position = await getCurrentDeviceLocation();
+    Position? position = pos ?? await getCurrentDeviceLocation();
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
 
     final url = Uri.parse('$apiDomain/api/v1/google/conditions');
-    final response = await http.post(
+    final http.Client c = client ?? http.Client();
+    final response = await c.post(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -89,6 +101,7 @@ Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
       },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
+    if (client == null) c.close();
 
     Map<String, dynamic>? weatherData;
     if (response.statusCode == 200) {
@@ -103,15 +116,19 @@ Future<Map<String, dynamic>?> fetchWeatherConditionForCurrentLocation() async {
 }
 
 /// Gets the device's current location and queries the forecast API.
-Future<Map<String, dynamic>?> fetchWeatherHistoryForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchWeatherHistoryForCurrentLocation({
+  Position? pos,
+  http.Client? client,
+}) async {
   try {
-    Position? position = await getCurrentDeviceLocation();
+    Position? position = pos ?? await getCurrentDeviceLocation();
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
 
     final url = Uri.parse('$apiDomain/api/v1/google/history');
-    final response = await http.post(
+    final http.Client c = client ?? http.Client();
+    final response = await c.post(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -119,6 +136,7 @@ Future<Map<String, dynamic>?> fetchWeatherHistoryForCurrentLocation() async {
       },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
+    if (client == null) c.close();
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
@@ -131,14 +149,17 @@ Future<Map<String, dynamic>?> fetchWeatherHistoryForCurrentLocation() async {
 }
 
 /// Fetches warnings from the API for the current device location.
-Future<Map<String, dynamic>?> fetchWarningsForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchWarningsForCurrentLocation({
+  Position? pos,
+  http.Client? client,
+}) async {
   try {
-    Position? position = await getCurrentDeviceLocation();
+    Position? position = pos ?? await getCurrentDeviceLocation();
     if (position == null) return null;
     double lat = position.latitude;
     double lon = position.longitude;
-
-    final response = await http.post(
+    final http.Client c = client ?? http.Client();
+    final response = await c.post(
       Uri.parse('$apiDomain/api/v1/warnings'),
       headers: {
         'Content-Type': 'application/json',
@@ -146,6 +167,7 @@ Future<Map<String, dynamic>?> fetchWarningsForCurrentLocation() async {
       },
       body: jsonEncode({"lat": lat, "lon": lon}),
     );
+    if (client == null) c.close();
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
@@ -161,6 +183,7 @@ Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
   String? rainfallEventId,
   double? lat,
   double? lon,
+  http.Client? client,
 }) async {
   try {
     double latitude;
@@ -175,7 +198,8 @@ Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
       longitude = position.longitude;
     }
 
-    final response = await http.post(
+    final http.Client c = client ?? http.Client();
+    final response = await c.post(
       Uri.parse('$apiDomain/api/v1/risk'),
       headers: {
         'Content-Type': 'application/json',
@@ -187,6 +211,7 @@ Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
         "rainfall_event_id": rainfallEventId ?? "none",
       }),
     );
+    if (client == null) c.close();
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
@@ -198,14 +223,17 @@ Future<Map<String, dynamic>?> fetchRiskForCurrentLocation({
 }
 
 /// Fetches all weather, hourly forecast, daily forecast, and rainfall data for the current location in a single call.
-Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation() async {
+Future<Map<String, dynamic>?> fetchWeatherForCurrentLocation({
+  Position? pos,
+  http.Client? client,
+}) async {
   try {
     final results = await Future.wait([
-      fetchHourlyForecastForCurrentLocation(),
-      fetchDailyForecastForCurrentLocation(),
-      fetchWeatherConditionForCurrentLocation(),
-      fetchWeatherHistoryForCurrentLocation(),
-      fetchRiskForCurrentLocation(rainfallEventId: "current"),
+      fetchHourlyForecastForCurrentLocation(pos: pos, client: client),
+      fetchDailyForecastForCurrentLocation(pos: pos, client: client),
+      fetchWeatherConditionForCurrentLocation(pos: pos, client: client),
+      fetchWeatherHistoryForCurrentLocation(pos: pos, client: client),
+      fetchRiskForCurrentLocation(rainfallEventId: "current", client: client),
     ]);
     final hourly = results[0];
     final daily = results[1];

@@ -141,3 +141,9 @@ The app integrates with various APIs for:
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Testing
+
+- Run all tests with: `flutter test`
+- Unit tests focus on API service logic using mocked HTTP clients, so they do not require network access or device plugins.
+- If dependencies are missing, run `flutter pub get` before testing.
